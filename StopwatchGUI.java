@@ -7,6 +7,7 @@ package Assignment04.GUI;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
@@ -14,25 +15,25 @@ import javafx.scene.control.TextArea;
  *
  * @author ben
  */
-public class StopwatchGUI {
+public class StopwatchGUI extends AnimationTimer{
     
-    RunnableWatch timer;
-    Thread t;
-    TextArea text;
+    Label l;
+    Stopwatch s;
     
-    public StopwatchGUI(){
-        timer = new RunnableWatch();
-        timer.start();
-        t = new Thread(timer);
-        text = new TextArea("00:00");
-    }
-    
-    public void startThread(){
-        t.start();
+    public StopwatchGUI(Stopwatch sw, Label lb){
+        super();
+        l = lb;
+        s = sw;
     }
     
     
-    public void setText(){
-        text.setText(""+timer.getTime());
+    @Override
+    public void handle(long now) {
+        s.setTime();
+        l.setText(""+s.getTime());
+    }
+    
+    public Label getText(){
+        return l;
     }
 }

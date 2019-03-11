@@ -5,15 +5,19 @@
  */
 package Assignment04.GUI;
 
+import java.text.DecimalFormat;
+import javafx.animation.AnimationTimer;
+
 /**
  * represents a stopwatch to keep track of elapsed time
  * @author ben
  */
-public class Stopwatch {
+public class Stopwatch{
     
-    private static long startTime = 0;
-    private static  long elapsedTime = 0;
-    private static boolean paused = true;
+    private long startTime = 0;
+    private long elapsedTime = 0;
+    private long savedTime = 0;
+    private boolean paused = true;
     
     /**
      * Constructor for Stopwatch 
@@ -22,14 +26,16 @@ public class Stopwatch {
     public Stopwatch(){
         startTime = 0;
         elapsedTime = 0;
+        savedTime = 0;
         paused = true;  //cant change time while paused
         
     }
     /**
      * Unpauses timer and sets the starttime to the current time
      */
-    public void start(){
+    public void startTime(){
         elapsedTime = 0;
+        savedTime = 0;
         startTime = System.nanoTime();
         paused = false;
     }
@@ -39,16 +45,20 @@ public class Stopwatch {
      * if it is paused, it just returns the elapsed time
      * @return elapsedTime - double version of the elapsed time
      */
-    public  double getTime(){
+    public  String getTime(){
+        String time;
+        DecimalFormat df = new DecimalFormat("####.##");
+        double dt= (double)elapsedTime/1000000000;
+        time = ""+df.format(dt);
         //if(!paused){
             //elapsedTime+= System.nanoTime()-startTime;
         //}
-        return (double)elapsedTime/1000000;
+        return time;
     }
     
     public void setTime(){
         if(!paused){
-            elapsedTime+= System.nanoTime()-startTime;
+            elapsedTime = savedTime+(System.nanoTime()-startTime);
         }
     }
     
@@ -58,7 +68,7 @@ public class Stopwatch {
     public  void pause(){
         if(!paused){
             paused = true;  //this makes it so the time cant be changed
-            elapsedTime+= System.nanoTime()-startTime;
+            savedTime+= System.nanoTime()-startTime;
         }
     }
     
