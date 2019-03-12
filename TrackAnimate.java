@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Assignment04.GUI;
+package racegame;
 
 import javafx.animation.PathTransition;
 import javafx.scene.shape.Ellipse;
@@ -41,7 +41,7 @@ public class TrackAnimate {
         for(int i=0;i<4;i++){
             t[i].setNode(draw[i]);
             t[i].setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-            t[i].setDuration(Duration.seconds(c[i].getSpped()));
+            t[i].setDuration(Duration.seconds(c[i].getSpeed()));
         }
         t[1].setPath(car2path);
         t[2].setPath(car3path);

@@ -1,7 +1,12 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package racegame;
+
 // Race-Game
 //our race game for project 4
-
-package Assignment04.GUI;
 /*
  *  @author Firas
  * 
@@ -37,7 +42,7 @@ public class Car {
             
         }
 	
-	public double getSpped() {
+	public double getSpeed() {
 		return speed;
 		
 	}
@@ -62,11 +67,11 @@ public class Car {
 		color = c;
 	}
 	
-	public boolean checTires() {
+	public boolean checkTires() {
 		return tireStatus;
 	}
 	// we still need to give value for int
-	public void setTiresStatus(boolean b,int set) {
+	public void setTireStatus(boolean b,int set) {
 		tireStatus=b;
 		
 	}
@@ -74,6 +79,10 @@ public class Car {
 	public void advanceCar() {
 		
 	}
+        
+        public char getEnd(){
+            return end;
+        }
         
         public String toString(){
             String s = "Player "+num+": "+name;
