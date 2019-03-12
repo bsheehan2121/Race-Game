@@ -33,6 +33,7 @@ public class StopwatchGUI extends AnimationTimer{
         l.setText(""+s.getTime());
     }
     
+    
     public Label getText(){
         return l;
     }
