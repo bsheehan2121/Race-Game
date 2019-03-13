@@ -5,6 +5,7 @@
  */
 package racegame;
 
+import java.util.ArrayList;
 import javafx.animation.PathTransition;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
@@ -14,34 +15,39 @@ import javafx.util.Duration;
  *
  * @author ben
  */
-public class TrackAnimate {
+public class TrackAnimate extends Race{
     
-    Car[] c;
     PathTransition[] t;
 
     
     public TrackAnimate(){
-        c = new Car[4];
+        super();
         t= new PathTransition[4];
         for(int i=0;i<4;i++){
-            c[i]= new Car();
+
             t[i]= new PathTransition();
         }
         
         
     }
     
+    public Rectangle[] getRectangles(){
+        Rectangle[] r = new Rectangle[4];
+        for(int i = 0; i < 4; i++)
+            r[i] = super.getRaceCars()[i].getDraw();
+        return r;
+    }
     
-    public void animateCars(Rectangle[] draw){
-        
+    public void animateCars(){
+        super.addCars();
         Ellipse car1path = new Ellipse(400,250,338,218);
         Ellipse car2path = new Ellipse(400,250,313,193);
         Ellipse car3path = new Ellipse(400,250,288,168);
         Ellipse car4path = new Ellipse(400,250,263,143);
         for(int i=0;i<4;i++){
-            t[i].setNode(draw[i]);
+            t[i].setNode(super.getRaceCars()[i].getDraw());
             t[i].setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-            t[i].setDuration(Duration.seconds(c[i].getSpeed()));
+            t[i].setDuration(Duration.seconds(super.getRaceCars()[i].getSpeed()));
         }
         t[1].setPath(car2path);
         t[2].setPath(car3path);

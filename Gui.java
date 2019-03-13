@@ -47,7 +47,7 @@ import javafx.util.Duration;
  */
 public class Gui extends Application{
     boolean raceing;
-    ArrayList<DrawCar> cars;
+    //ArrayList<DrawCar> cars;
     Rectangle[] draw;
     ObservableList<String> options;
     
@@ -64,7 +64,7 @@ public class Gui extends Application{
         s = new Stopwatch();
         time = new Label("00:00");
         timer= new StopwatchGUI(s,time);
-        cars = new ArrayList<DrawCar>();
+        //cars = new ArrayList<DrawCar>();
         draw = new Rectangle[4];
         tracks = new TrackAnimate();
         color = null;
@@ -97,19 +97,16 @@ public class Gui extends Application{
         addPlayer.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
-                if(cars.size()==4){
+                if(tracks.getCars().size()==4){
                     Alert tooManyCars = new Alert(Alert.AlertType.WARNING);
                     tooManyCars.setHeaderText("Too Many Cars");
                     tooManyCars.setContentText("Already have max number of racers");
                     tooManyCars.showAndWait();
                 }else{
                     
-                    cars.add(addCar());
-                    String s = "";
-                    for(DrawCar c: cars){
-                        s+= c.toString()+"\n";
-                    }
-                    display.setText(s);
+                    tracks.addCar(addCar());
+                    
+                    display.setText(tracks.toString());
                 }
             }
         });
@@ -119,14 +116,14 @@ public class Gui extends Application{
         start.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
-                if(cars.isEmpty()){
+                if(tracks.getCars().isEmpty()){
                     Alert noCars = new Alert(Alert.AlertType.WARNING);
                     noCars.setHeaderText("No Cars");
                     noCars.setContentText("Please add atleast 1 car to race");
                     noCars.showAndWait();
                 }else{
                 
-                
+                    
                     /**
                     * ********************Race Screen*********************************************************************
                     */
@@ -173,35 +170,13 @@ public class Gui extends Application{
                 
                     Ellipse track2 = new Ellipse(400,250,250,130);
                 
-                    // ***********Draw Cars******************************************************************************************
-                    if(cars.size()==4){
-                        draw[0] = cars.get(0).getDraw();
-                        draw[1] = cars.get(1).getDraw();
-                        draw[2] = cars.get(2).getDraw();
-                        draw[3] = cars.get(3).getDraw();
-                    }else if(cars.size()==3){
-                        draw[0] = cars.get(0).getDraw();
-                        draw[1] = cars.get(1).getDraw();
-                        draw[2] = cars.get(2).getDraw();
-                        draw[3] = new Rectangle(0,0);
                     
-                    }else if(cars.size()==2){
-                        draw[0] = cars.get(0).getDraw();
-                        draw[1] = cars.get(1).getDraw();
-                        draw[2] = new Rectangle(0, 0);
-                        draw[3] = new Rectangle(0, 0);
-                    }else{
-                        draw[0] = cars.get(0).getDraw();
-                        draw[1] = new Rectangle(0, 0);
-                        draw[2] = new Rectangle(0, 0);
-                        draw[3] = new Rectangle(0, 0);
-                    }
                    //***********************************leader board***********************************************
-                   tracks.animateCars(draw);
+                   tracks.animateCars();
                    
                    
                    
-                    
+                    draw = tracks.getRectangles();
                     race.getChildren().addAll(track,lines,lines2,lines3,track2,draw[0],draw[1],draw[2],draw[3]);
                     h2.getChildren().add(race);
                     

@@ -20,7 +20,7 @@ public class DrawCar extends Car{
     
     public DrawCar(){
         super();
-        r = new Rectangle(15,13);
+        r = new Rectangle(0,0);
         r.setFill(Color.BLACK);
     }
     
