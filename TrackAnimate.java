@@ -61,14 +61,28 @@ public class TrackAnimate extends Race{
     
     public void animateCars(){
         super.addCars();
-        Ellipse car1path = new Ellipse(400,250,338,218);
+        Ellipse car1path = new Ellipse(-338,0,338,218);
        // car1path.intersects(400, 0, 400, 1000);
-        Ellipse car2path = new Ellipse(400,250,313,193);
-        Ellipse car3path = new Ellipse(400,250,288,168);
-        Ellipse car4path = new Ellipse(400,250,263,143);
+        Ellipse car2path = new Ellipse(-313,0,313,193);
+        Ellipse car3path = new Ellipse(-288,0,288,168);
+        Ellipse car4path = new Ellipse(-263,0,263,143);
+        
+        
+        
         Duration temp;
         for(int i=0;i<4;i++){
             super.getRaceCars()[i].setStarted();
+            if(i==0){
+                super.getRaceCars()[i].getDraw().relocate(738, 250);
+            }else if(i==1){
+                super.getRaceCars()[i].getDraw().relocate(713, 250);
+            }else if(i==2){
+                super.getRaceCars()[i].getDraw().relocate(688, 250);
+            }else{
+                super.getRaceCars()[i].getDraw().relocate(663, 250);
+            }
+            super.getRaceCars()[i].getDraw().setRotate(90);
+            
             
             for(int j=0;j<3;j++){
                 
@@ -192,7 +206,7 @@ public class TrackAnimate extends Race{
             if(((PathTransition)o).equals(t[i][2])){
                 super.getRaceCars()[i].setSplit(2, super.raceTimer.getTimed());
                 super.getRaceCars()[i].setTotalTime(super.raceTimer.getTimed());
-                super.getRaceCars()[i].setLap(i+1);
+                super.getRaceCars()[i].setLap(4);
                 if(!super.getRaceCars()[i].invisible){
                     finished++;
                 }
