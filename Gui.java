@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Assignment04.GUI;
+package racegame;
+
+
 
 
 import java.awt.Transparency;
@@ -17,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -45,27 +48,29 @@ import javafx.util.Duration;
  */
 public class Gui extends Application{
     boolean raceing;
-    ArrayList<DrawCar> cars;
-    Rectangle[] draw;
+    //ArrayList<DrawCar> cars;
+    Group[] draw;
     ObservableList<String> options;
+    ObservableList<String> options2;
+    TextArea lead;
     
     TrackAnimate tracks;
     
-    Stopwatch s;
-    Label time;
-    StopwatchGUI timer;
     String color;
+    int num;
+    String type;
     //RunnableLabel r = new RunnableLabel();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        s = new Stopwatch();
-        time = new Label("00:00");
-        timer= new StopwatchGUI(s,time);
-        cars = new ArrayList<DrawCar>();
-        draw = new Rectangle[4];
-        tracks = new TrackAnimate();
+        
+        //cars = new ArrayList<DrawCar>();
+        draw = new Group[4];
+        lead = new TextArea();
+        tracks = new TrackAnimate(lead);
         color = null;
+        num = 0;
+        type = "none";
         
         
         options =  FXCollections.observableArrayList(
@@ -75,6 +80,14 @@ public class Gui extends Application{
             "green",
             "yellow",
             "purple"
+        );
+        
+        options2 =  FXCollections.observableArrayList(
+            "racecar",
+            "truck",
+            "hybrid",
+            "car"
+            
         );
         
         
@@ -95,17 +108,17 @@ public class Gui extends Application{
         addPlayer.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
-                if(cars.size()==4){
+                if(tracks.getCars().size()==4){
                     Alert tooManyCars = new Alert(Alert.AlertType.WARNING);
                     tooManyCars.setHeaderText("Too Many Cars");
                     tooManyCars.setContentText("Already have max number of racers");
                     tooManyCars.showAndWait();
                 }else{
                     
-                    cars.add(addCar());
-                    String s = "";
-                    for(DrawCar c: cars){
-                        s+= c.toString()+"\n";
+                    tracks.addCar(addCar());
+                    String s="                    Current Racers: \n";
+                    for(Car c : tracks.getCars()){
+                        s+=c.toString()+"\n";
                     }
                     display.setText(s);
                 }
@@ -117,14 +130,15 @@ public class Gui extends Application{
         start.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
-                if(cars.isEmpty()){
+                if(tracks.getCars().isEmpty()){
                     Alert noCars = new Alert(Alert.AlertType.WARNING);
                     noCars.setHeaderText("No Cars");
                     noCars.setContentText("Please add atleast 1 car to race");
                     noCars.showAndWait();
                 }else{
+                    
                 
-                
+                    
                     /**
                     * ********************Race Screen*********************************************************************
                     */
@@ -138,8 +152,8 @@ public class Gui extends Application{
                     //****************Header***************************************************************************
                     h1.setMinSize(500,100);
                     //s.startTime();
-                    timer.start();
-                    h1.getChildren().addAll(time);
+                    tracks.start();
+                    h1.getChildren().addAll(tracks.getLabel());
                     //***************Center***************************************************************************
                 
                     h2.setPrefSize(500, 500);
@@ -171,36 +185,17 @@ public class Gui extends Application{
                 
                     Ellipse track2 = new Ellipse(400,250,250,130);
                 
-                    // ***********Draw Cars******************************************************************************************
-                    if(cars.size()==4){
-                        draw[0] = cars.get(0).getDraw();
-                        draw[1] = cars.get(1).getDraw();
-                        draw[2] = cars.get(2).getDraw();
-                        draw[3] = cars.get(3).getDraw();
-                    }else if(cars.size()==3){
-                        draw[0] = cars.get(0).getDraw();
-                        draw[1] = cars.get(1).getDraw();
-                        draw[2] = cars.get(2).getDraw();
-                        draw[3] = new Rectangle(0,0);
                     
-                    }else if(cars.size()==2){
-                        draw[0] = cars.get(0).getDraw();
-                        draw[1] = cars.get(1).getDraw();
-                        draw[2] = new Rectangle(0, 0);
-                        draw[3] = new Rectangle(0, 0);
-                    }else{
-                        draw[0] = cars.get(0).getDraw();
-                        draw[1] = new Rectangle(0, 0);
-                        draw[2] = new Rectangle(0, 0);
-                        draw[3] = new Rectangle(0, 0);
-                    }
                    //***********************************leader board***********************************************
-                   tracks.animateCars(draw);
+                   tracks.animateCars();
                    
+                   lead.setMaxSize(400, 500);
+                   lead.setMinSize(400, 500);
+                   lead.relocate(800, 0);
+                   lead.setEditable(false);
                    
-                   
-                    
-                    race.getChildren().addAll(track,lines,lines2,lines3,track2,draw[0],draw[1],draw[2],draw[3]);
+                    draw = tracks.getRectangles();
+                    race.getChildren().addAll(track,lines,lines2,lines3,track2,draw[0],draw[1],draw[2],draw[3],lead);
                     h2.getChildren().add(race);
                     
                     
@@ -219,10 +214,10 @@ public class Gui extends Application{
                     Button play = new Button("Play");
                     Button restart = new Button("Restart");
                     
+                       
                     pause.setOnAction(new EventHandler<ActionEvent>(){
                         @Override
                         public void handle(ActionEvent e){
-                            s.pause();
                             tracks.pause();
                         }
                     });
@@ -230,7 +225,6 @@ public class Gui extends Application{
                     play.setOnAction(new EventHandler<ActionEvent>(){
                         @Override
                         public void handle(ActionEvent e){
-                            s.resume();
                             tracks.resume();
                             
                         }
@@ -239,7 +233,6 @@ public class Gui extends Application{
                     restart.setOnAction(new EventHandler<ActionEvent>(){
                         @Override
                         public void handle(ActionEvent e){
-                            s.startTime();
                             tracks.restart();
                         }
                     });
@@ -282,12 +275,16 @@ public class Gui extends Application{
         
         
         final ComboBox colors = new ComboBox(options);
+        final ComboBox types = new ComboBox(options2);
         HBox h1 = new HBox();
         HBox h2 = new HBox();
+        HBox h3 = new HBox();
         Label l = new Label("Pick Race Car Color:  ");
         h1.getChildren().add(l);
         Label l2 = new Label("Enter Racers Name  ");
         h2.getChildren().add(l2);
+        Label l3 = new Label("Pick Race Car Type:  ");
+        h3.getChildren().add(l3);
         TextArea name = new TextArea();
         name.setMaxSize(100, 15);
         Button done = new Button("Add Player");
@@ -295,9 +292,11 @@ public class Gui extends Application{
         done.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e){
-                if((!(colors.getSelectionModel().isEmpty()))&&(!(name.getText().isEmpty()))){
+                if((!(colors.getSelectionModel().isEmpty()))&&(!(name.getText().isEmpty()))&&(!(types.getSelectionModel().isEmpty()))){
                     color = ""+colors.getValue();
+                    type = ""+types.getValue();
                     options.remove(""+colors.getValue());
+                    num++;
                     add.close();
                 }else{
                     Alert invaled = new Alert(Alert.AlertType.ERROR);
@@ -311,18 +310,20 @@ public class Gui extends Application{
         g.setVgap(10);
         g.setHgap(10);
         g.setPadding(new Insets(10, 10, 10, 10));
-        g.add(h1,2,2,4,4);
+        g.add(h1,2,2,4,5);
         //l.resize(50, 100);
         g.add(colors, 3, 2);
         g.add(h2, 2, 3);
         g.add(name, 3, 3);
-        g.add(done,3,4);
+        g.add(l3, 2, 4);
+        g.add(types, 3, 4);
+        g.add(done,3,5);
         Scene addp = new Scene(g, 350, 200);
         add.setScene(addp);
         add.getScene().getWindow().setOnCloseRequest(event -> event.consume());
         add.showAndWait();
         
-        return new DrawCar(color,name.getText());
+        return new DrawCar(color,name.getText(),num,type);
     }
     
     

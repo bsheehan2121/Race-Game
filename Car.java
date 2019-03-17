@@ -1,7 +1,15 @@
-// Race-Game
-//our race game for project 4
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package racegame;
 
-package Assignment04.GUI;
+// Race-Game
+
+import java.util.Random;
+
+//our race game for project 4
 /*
  *  @author Firas
  * 
@@ -11,40 +19,78 @@ public class Car {
 	
 	private double speed;
 	private String color;
-	private char start;
-	private char end;
-	private boolean tireStatus;
         private String name;
-        private static int num=0;
+        private int num=0;
+        public String type;
+        
+        private int delay;
+        private Random r;
+        public boolean invisible;
 	
 	public Car() {
-		
-		speed = 10;
+		r = new Random();
+		speed = 30;
 		color = " ";
-		start = 0;
-		end = 0;
-		tireStatus=false;
+		
                 name = "Car";
+                delay = 10;
+                invisible = true;
+                type = "none";
 	}
-        public Car(String c,String n){
-                speed = 10;
+        public Car(String c,String n,int i,String t){
+                r = new Random();
 		color = c;
-		start = 0;
-		end = 0;
-		tireStatus=false;
+                type = t;
                 name = n;
-                num++;
+                num = i;
+                invisible = false;
+                
+                if(type.equals("racecar")){
+                    speed = r.nextInt(5)+5;
+                    delay = r.nextInt(5)+5;
+                }else if(type.equals("truck")){
+                    speed = r.nextInt(15)+5;
+                    delay = r.nextInt(5);
+                }else if(type.equals("hybrid")){
+                    speed = 15;
+                    delay = r.nextInt(5)+5;
+                }else if(type.equals("car")){
+                    speed = r.nextInt(15)+5;
+                    delay = 0;
+                }else{
+                    speed = 20;
+                    delay=10;
+                }
             
         }
 	
-	public double getSpped() {
+	public double getSpeed() {
+                setSpeed();
 		return speed;
 		
 	}
+        
+        public int getDelay(){
+            return delay;
+        }
 	
 	public void setSpeed(double s) {
+            
 		speed=s;
 	}
+        
+        public void setSpeed(){
+            if(type.equals("racecar")){
+                speed = r.nextInt(5)+5;
+            }else if(type.equals("truck")){
+                speed = r.nextInt(15)+5;
+            }else if(type.equals("hybrid")){
+                    speed = 15;
+            }else if(type.equals("car")){
+                speed = r.nextInt(10)+10;
+            }
+           
+        }
 	
 	public String getColor() {
 		return color;
@@ -62,22 +108,17 @@ public class Car {
 		color = c;
 	}
 	
-	public boolean checTires() {
-		return tireStatus;
-	}
-	// we still need to give value for int
-	public void setTiresStatus(boolean b,int set) {
-		tireStatus=b;
-		
-	}
-	//i wasn't sure what this one for
-	public void advanceCar() {
-		
-	}
+	
+	
         
         public String toString(){
-            String s = "Player "+num+": "+name;
-            s+="            Color: "+ color;
+            String s;
+            if(invisible){
+                s="        ";
+            }else{
+                s = "Player "+num+":  "+name;
+                s+="   Color: "+ color;
+            }
             return s;
         }
 	
