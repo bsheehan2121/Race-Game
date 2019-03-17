@@ -12,6 +12,7 @@ package racegame;
  */
 
 import java.text.DecimalFormat;
+import javafx.util.Duration;
 
 /**
  * represents a stopwatch to keep track of elapsed time
@@ -68,6 +69,10 @@ public class Stopwatch{
         if(!paused){
             elapsedTime = savedTime+(System.nanoTime()-startTime);
         }
+    }
+    public void setTime(long d){
+        savedTime = d*1000000000;
+        elapsedTime = d*1000000000;
     }
     
     /**

@@ -29,7 +29,7 @@ public class Car {
 	
 	public Car() {
 		r = new Random();
-		speed = 30;
+		speed = 20;
 		color = " ";
 		
                 name = "Car";
@@ -49,14 +49,14 @@ public class Car {
                     speed = r.nextInt(5)+5;
                     delay = r.nextInt(5)+5;
                 }else if(type.equals("truck")){
-                    speed = r.nextInt(15)+5;
+                    speed = 20;
                     delay = r.nextInt(5);
                 }else if(type.equals("hybrid")){
-                    speed = 15;
-                    delay = r.nextInt(5)+5;
+                    speed = 10;
+                    delay = r.nextInt(3);
                 }else if(type.equals("car")){
                     speed = r.nextInt(15)+5;
-                    delay = 0;
+                    delay = 1;
                 }else{
                     speed = 20;
                     delay=10;
@@ -83,11 +83,15 @@ public class Car {
             if(type.equals("racecar")){
                 speed = r.nextInt(5)+5;
             }else if(type.equals("truck")){
-                speed = r.nextInt(15)+5;
+                if(speed>5){
+                    speed = speed-(r.nextInt(3)+4);
+                }else{
+                    speed = 20-(r.nextInt(3)+4);
+                }
             }else if(type.equals("hybrid")){
-                    speed = 15;
+                    speed = 10;
             }else if(type.equals("car")){
-                speed = r.nextInt(10)+10;
+                speed = r.nextInt(10)+7;
             }
            
         }
@@ -118,6 +122,7 @@ public class Car {
             }else{
                 s = "Player "+num+":  "+name;
                 s+="   Color: "+ color;
+                s+="   Type: "+ type;
             }
             return s;
         }

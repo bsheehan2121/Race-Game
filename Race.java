@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 /**
  *
@@ -20,7 +23,6 @@ public class Race extends AnimationTimer{
     private DrawCar[] raceCars;
     private ArrayList<DrawCar> userCars;
     
-    private char curPos;
     public Stopwatch raceTimer;
     public Label l;
     public int numRacers;
@@ -32,9 +34,11 @@ public class Race extends AnimationTimer{
         
         raceTime = 0;
         raceTimer = new Stopwatch();
-        curPos = 'A';
         userCars = new ArrayList<DrawCar>();
         l = new Label("00:00");
+        l.relocate(100,100);
+        l.setMinSize(50, 50);
+        l.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
         numRacers = 0;
         
     }
@@ -49,6 +53,12 @@ public class Race extends AnimationTimer{
     public void addCar(DrawCar c){
         c.setDraw();
         userCars.add(c);
+        
+    }
+    
+    public void removeCar(){
+        
+        userCars.remove(userCars.size()-1);
         
     }
     

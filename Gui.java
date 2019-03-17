@@ -53,6 +53,9 @@ public class Gui extends Application{
     ObservableList<String> options;
     ObservableList<String> options2;
     TextArea lead;
+    TextArea display;
+    Stage ps;
+    Stage secondStage;
     
     TrackAnimate tracks;
     
@@ -63,6 +66,7 @@ public class Gui extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        ps = primaryStage;
         
         //cars = new ArrayList<DrawCar>();
         draw = new Group[4];
@@ -71,6 +75,8 @@ public class Gui extends Application{
         color = null;
         num = 0;
         type = "none";
+        
+        
         
         
         options =  FXCollections.observableArrayList(
@@ -98,10 +104,20 @@ public class Gui extends Application{
          * ************Start Screen********************
          */
         VBox root = new VBox();
-        TextArea display = new TextArea("Welcome to racing game");
+        String st = "Welcome to Raceing Game! \n\n";
+        st+= "   To start please add at least 1 car to the track \n";
+        st+= "   You will select a Color and Type for your car as well as pick a name \n\n";
+        st+= "   Types:\n";
+        st+= "      RaceCar: the fastest car but delays the longest to begin\n";
+        st+= "      Truck: unpredictable speed and delay times \n";
+        st+= "      Hybrid: moves at a constant speed and may delay at start \n";
+        st+= "      Car: slowest car but does not delay at the start";
+        st+=tracks.allstar();
+        display = new TextArea(st);
         display.setMinSize(200, 200);
         Button start = new Button("Start");
-        Button addPlayer = new Button("Add Player");
+        Button addPlayer = new Button("Add Racer");
+        Button removePlayer = new Button("Remove Racer");
         /**
          * adds a car 
          */
@@ -120,6 +136,28 @@ public class Gui extends Application{
                     for(Car c : tracks.getCars()){
                         s+=c.toString()+"\n";
                     }
+                    s+=tracks.allstar();
+                    display.setText(s);
+                }
+            }
+        });
+        
+        removePlayer.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent e){
+                if(tracks.getCars().isEmpty()){
+                    Alert notEnoughCars = new Alert(Alert.AlertType.WARNING);
+                    notEnoughCars.setHeaderText("No Cars");
+                    notEnoughCars.setContentText("There are no cars to remove");
+                    notEnoughCars.showAndWait();
+                }else{
+                    
+                    tracks.removeCar();
+                    String s="                            Current Racers: \n";
+                    for(Car c : tracks.getCars()){
+                        s+=c.toString()+"\n";
+                    }
+                    s+=tracks.allstar();
                     display.setText(s);
                 }
             }
@@ -213,6 +251,7 @@ public class Gui extends Application{
                     Button pause = new Button("Pause");
                     Button play = new Button("Play");
                     Button restart = new Button("Restart");
+                    Button toMainMenue = new Button("Return to Main Menue");
                     
                        
                     pause.setOnAction(new EventHandler<ActionEvent>(){
@@ -237,17 +276,54 @@ public class Gui extends Application{
                         }
                     });
                     
+                    toMainMenue.setOnAction(new EventHandler<ActionEvent>(){
+                        @Override
+                        public void handle(ActionEvent e){
+                            secondStage.close();
+                            for(int i=0;i<4;i++){
+                                if(!tracks.getCars().isEmpty()){
+                                    tracks.removeCar();
+                                }
+                            }
+                            tracks.raceTimer.setTime(0);
+                            tracks.raceTimer.pause();
+                            String st = "Welcome to Raceing Game! \n\n";
+                            st+= "   To start please add at least 1 car to the track \n";
+                            st+= "   You will select a Color and Type for your car as well as pick a name \n\n";
+                            st+= "   Types:\n";
+                            st+= "      RaceCar: the fastest car but delays the longest to begin\n";
+                            st+= "      Truck: unpredictable speed and delay times \n";
+                            st+= "      Hybrid: moves at a constant speed and may delay at start \n";
+                            st+= "      Car: slowest car but does not delay at the start";
+                            st+= tracks.allstar();
+                            display.setText(st);
+                            options =  FXCollections.observableArrayList(
+                                    "red",
+                                    "blue",
+                                    "black",
+                                    "green",
+                                    "yellow",
+                                    "purple"
+                                    );
+                            num=0;
+                            ps.show();
+                            
+                            
+                        }
+                    });
+                    
+                    
                     //p.getChildren().addAll(pause,play,restart);
-                    h3.getChildren().addAll(pause,play,restart);
+                    h3.getChildren().addAll(pause,play,restart,toMainMenue);
                 //**********************************************************************************************************8
                     v.getChildren().addAll(h1,h2,h3);
                     secondaryLayout.getChildren().addAll(v);
                     Scene secondScene = new Scene(secondaryLayout, 1200, 700);
-                    Stage secondStage = new Stage();
+                    secondStage = new Stage();
                     secondStage.setTitle("Race");
                     secondStage.setScene(secondScene);
                     secondStage.show();
-                    primaryStage.close();       
+                    primaryStage.hide();  
                 }   
             }  
         });
@@ -257,7 +333,7 @@ public class Gui extends Application{
         
        
         
-        root.getChildren().addAll(display,addPlayer,start);
+        root.getChildren().addAll(display,addPlayer,removePlayer,start);
         //root.getChildren().addAll(display,addPlayer,start);
         
         primaryStage.setTitle("Race Game");

@@ -103,6 +103,10 @@ public class DrawCar extends Car{
         }
     }
     
+    public double getSplit(int i){
+        return splits[i];
+    }
+    
     public void setTotalTime(double d){
         totalTime = d;
     }
@@ -125,12 +129,19 @@ public class DrawCar extends Car{
     public void setStarted(){
         started = true;
     }
-    public void reset(){
-        splits[0]=0.0;
-        splits[1]=0.0;
-        splits[2]=0.0;
-        lap=0;
-        totalTime = 0;
+    public void reset(int i){
+        if(i==1){
+            totalTime += 0-splits[2];
+            splits[2]=0.0;
+            lap=2;
+            
+        }else{
+            splits[0]=0.0;
+            splits[1]=0.0;
+            splits[2]=0.0;
+            lap=0;
+            totalTime = 0;
+        }
     }
     
     public String toString(){
@@ -150,7 +161,7 @@ public class DrawCar extends Car{
                     count++;
                 }
             }
-            if(lap<2){
+            if(lap>2){
                 s += "\n    Final Time: "+totalTime;
             }else if(totalTime>0){
                 s += "\n    Elapsed Time: "+totalTime;
