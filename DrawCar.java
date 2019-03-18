@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package racegame;
 
 
@@ -18,14 +14,15 @@ import javafx.scene.shape.Shape;
  *
  * @author ben
  */
+// the DrawCar class creates a car that can be represented graphically
 public class DrawCar extends Car{
-    Group g;
-    Shape s;
-    HashMap hm;
-    double[] splits;
-    int lap;
-    double totalTime;
-    boolean started;
+    private Group g;
+    private Shape s;
+    private HashMap hm;
+    private double[] splits;
+    private int lap;
+    private double totalTime;
+    private boolean started;
     
     public DrawCar(){
         super();
@@ -62,7 +59,7 @@ public class DrawCar extends Car{
     }
     
     public void setDraw(){
-        if(type.equals("racecar")){
+        if(super.getType().equals("racecar")){
             
 
             Polygon p = new Polygon();
@@ -72,11 +69,11 @@ public class DrawCar extends Car{
                 10.0, 5.0 });
             p.setFill((Color)hm.get(super.getColor()));
             g.getChildren().add(p);
-        }else if(type.equals("truck")){
+        }else if(super.getType().equals("truck")){
             s= new Rectangle(20,15);
             s.setFill((Color)hm.get(super.getColor()));
             g.getChildren().add(s);   
-        }else if(type.equals("hybrid")){
+        }else if(super.getType().equals("hybrid")){
             s = new Rectangle(12,12);
             s.setFill((Color)hm.get(super.getColor()));
             g.getChildren().add(s);  
@@ -146,7 +143,7 @@ public class DrawCar extends Car{
     
     public String toString(){
         String s = super.toString();
-        if(!super.invisible){
+        if(!super.getInvisible()){
             if(lap<3){
                 if(started){
                     s += "   Lap: "+(lap+1);

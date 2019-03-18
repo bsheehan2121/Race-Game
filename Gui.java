@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package racegame;
 
 
@@ -46,29 +42,29 @@ import javafx.util.Duration;
  *
  * @author ben
  */
+
+// the Gui class creates and runs the race game graphically
 public class Gui extends Application{
-    boolean raceing;
-    //ArrayList<DrawCar> cars;
-    Group[] draw;
-    ObservableList<String> options;
-    ObservableList<String> options2;
-    TextArea lead;
-    TextArea display;
-    Stage ps;
-    Stage secondStage;
+    private boolean raceing;
     
-    TrackAnimate tracks;
+    private Group[] draw;
+    private ObservableList<String> options;
+    private ObservableList<String> options2;
+    private TextArea lead;
+    private TextArea display;
+    private Stage ps;
+    private Stage secondStage;
     
-    String color;
-    int num;
-    String type;
-    //RunnableLabel r = new RunnableLabel();
+    private TrackAnimate tracks;
+    
+    private String color;
+    private int num;
+    private String type;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         ps = primaryStage;
         
-        //cars = new ArrayList<DrawCar>();
         draw = new Group[4];
         lead = new TextArea();
         tracks = new TrackAnimate(lead);
@@ -104,7 +100,7 @@ public class Gui extends Application{
          * ************Start Screen********************
          */
         VBox root = new VBox();
-        String st = "Welcome to Raceing Game! \n\n";
+        String st = "Welcome to Racing Game! \n\n";
         st+= "   To start please add at least 1 car to the track \n";
         st+= "   You will select a Color and Type for your car as well as pick a name \n\n";
         st+= "   Types:\n";
@@ -171,7 +167,7 @@ public class Gui extends Application{
                 if(tracks.getCars().isEmpty()){
                     Alert noCars = new Alert(Alert.AlertType.WARNING);
                     noCars.setHeaderText("No Cars");
-                    noCars.setContentText("Please add atleast 1 car to race");
+                    noCars.setContentText("Please add at least 1 car to race");
                     noCars.showAndWait();
                 }else{
                     
@@ -251,7 +247,7 @@ public class Gui extends Application{
                     Button pause = new Button("Pause");
                     Button play = new Button("Play");
                     Button restart = new Button("Restart");
-                    Button toMainMenue = new Button("Return to Main Menue");
+                    Button toMainMenue = new Button("Return to Main Menu");
                     
                        
                     pause.setOnAction(new EventHandler<ActionEvent>(){
@@ -285,9 +281,9 @@ public class Gui extends Application{
                                     tracks.removeCar();
                                 }
                             }
-                            tracks.raceTimer.setTime(0);
-                            tracks.raceTimer.pause();
-                            String st = "Welcome to Raceing Game! \n\n";
+                            tracks.getTimer().setTime(0);
+                                tracks.getTimer().pause();
+                            String st = "Welcome to Racing Game! \n\n";
                             st+= "   To start please add at least 1 car to the track \n";
                             st+= "   You will select a Color and Type for your car as well as pick a name \n\n";
                             st+= "   Types:\n";

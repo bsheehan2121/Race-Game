@@ -1,37 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package racegame;
 
-// Race-Game
+
 
 import java.util.Random;
-
-//our race game for project 4
 /*
  *  @author Firas
  * 
  */
 
+// The Car class represents a race car
+
+// Firas wrote the initial car class
+// Elizabeth made some minor changes
+// Ben added to the Car class, enabling different types of car with different
+// speeds and attributes
 public class Car {
 	
+        // Elizabeth made some minor variable changes to ensure
+        // secure code
 	private double speed;
 	private String color;
         private String name;
-        private int num=0;
-        public String type;
+        private int num;
+        private String type;
         
         private int delay;
         private Random r;
-        public boolean invisible;
+        private boolean invisible;
 	
 	public Car() {
 		r = new Random();
 		speed = 20;
 		color = " ";
-		
+		num = 0;
                 name = "Car";
                 delay = 10;
                 invisible = true;
@@ -45,22 +47,30 @@ public class Car {
                 num = i;
                 invisible = false;
                 
-                if(type.equals("racecar")){
+            // Ben wrote this originally as an if/else series of statements,
+            // Elizabeth changed it to a switch statement
+            switch (type) {
+                case "racecar":
                     speed = r.nextInt(5)+5;
                     delay = r.nextInt(5)+5;
-                }else if(type.equals("truck")){
+                    break;
+                case "truck":
                     speed = 20;
                     delay = r.nextInt(5);
-                }else if(type.equals("hybrid")){
+                    break;
+                case "hybrid":
                     speed = 10;
                     delay = r.nextInt(3);
-                }else if(type.equals("car")){
+                    break;
+                case "car":
                     speed = r.nextInt(15)+5;
                     delay = 1;
-                }else{
+                    break;
+                default:
                     speed = 20;
                     delay=10;
-                }
+                    break;
+            }
             
         }
 	
@@ -80,18 +90,26 @@ public class Car {
 	}
         
         public void setSpeed(){
-            if(type.equals("racecar")){
-                speed = r.nextInt(5)+5;
-            }else if(type.equals("truck")){
-                if(speed>5){
-                    speed = speed-(r.nextInt(3)+4);
-                }else{
-                    speed = 20-(r.nextInt(3)+4);
-                }
-            }else if(type.equals("hybrid")){
+            // Ben wrote this as a series of if/else statements,
+            // Elizabeth changed it to a switch statement
+            switch (type) {
+                case "racecar":
+                    speed = r.nextInt(5)+5;
+                    break;
+                case "truck":
+                    if(speed>5){
+                        speed = speed-(r.nextInt(3)+4);
+                    }else{
+                        speed = 20-(r.nextInt(3)+4);
+                    }   break;
+                case "hybrid":
                     speed = 10;
-            }else if(type.equals("car")){
-                speed = r.nextInt(10)+7;
+                    break;
+                case "car":
+                    speed = r.nextInt(10)+7;
+                    break;
+                default:
+                    break;
             }
            
         }
@@ -112,8 +130,14 @@ public class Car {
 		color = c;
 	}
 	
+        // Elizabeth added these two methods
+	public boolean getInvisible(){
+            return invisible;
+        }
 	
-	
+        public String getType(){
+            return type;
+        }
         
         public String toString(){
             String s;

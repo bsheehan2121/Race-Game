@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package racegame;
 
 import java.util.ArrayList;
@@ -29,14 +25,15 @@ import javafx.util.Duration;
  *
  * @author ben
  */
+// The TrackAnimate class creates the animation for the cars in the Race class
 public class TrackAnimate extends Race{
     
-    PathTransition[][] t;
-    TextArea leaders;
-    int finished = 0;
-    DrawCar winner;
-    DrawCar allstar;
-    String allstarstats;
+    private PathTransition[][] t;
+    private TextArea leaders;
+    private int finished = 0;
+    private DrawCar winner;
+    private DrawCar allstar;
+    private String allstarstats;
    
 
     
@@ -45,6 +42,7 @@ public class TrackAnimate extends Race{
      
         leaders = tx;
         winner = new DrawCar();
+        // This is the car that has gone the fastest in the history of races
         allstar = new DrawCar();
         allstar.setTotalTime(10000000);
         t= new PathTransition[4][3];
@@ -78,7 +76,7 @@ public class TrackAnimate extends Race{
         
         super.addCars();
         Ellipse car1path = new Ellipse(-338,0,338,218);
-       // car1path.intersects(400, 0, 400, 1000);
+       
         Ellipse car2path = new Ellipse(-313,0,313,193);
         Ellipse car3path = new Ellipse(-288,0,288,168);
         Ellipse car4path = new Ellipse(-263,0,263,143);
@@ -142,7 +140,7 @@ public class TrackAnimate extends Race{
     }
     
     public void play(){
-        super.raceTimer.startTime();  //controls timer 
+        super.getTimer().startTime();  //controls timer 
         for(int i = 0; i<4;i++){
             t[i][super.getRaceCars()[i].getLap()].play(); //only starts the current lap animation
         }
@@ -154,7 +152,7 @@ public class TrackAnimate extends Race{
         for(int i=0;i<4;i++){
             for(int j=0;j<2;j++){
                 if(((PathTransition)o).equals(t[i][j])){  // finds the animation that just finished
-                    super.getRaceCars()[i].setSplit(j, raceTimer.getTimed()); // adds the time split
+                    super.getRaceCars()[i].setSplit(j, super.getTimer().getTimed()); // adds the time split
                     
                     if(super.getRaceCars()[i].getLap()<2){
                         super.getRaceCars()[i].setLap(super.getRaceCars()[i].getLap()+1); // updates the lap
@@ -172,14 +170,14 @@ public class TrackAnimate extends Race{
     }
     
     public void pause(){
-        super.raceTimer.pause(); // pauses the time
+        super.getTimer().pause(); // pauses the time
         for(int i = 0; i<4;i++){
             t[i][super.getRaceCars()[i].getLap()].pause(); // pauses the current lap animation
         }
     }
     
     public void resume(){
-        super.raceTimer.resume(); //resumes the time
+        super.getTimer().resume(); //resumes the time
         for(int i = 0; i<4;i++){
             t[i][super.getRaceCars()[i].getLap()].play(); // starts animation where it left off
         }
@@ -187,7 +185,7 @@ public class TrackAnimate extends Race{
     
     // restarts the race and clears lap and splits
     public void restart(){
-        super.raceTimer.startTime();
+        super.getTimer().startTime();
         finished=0;
         for(int i = 0; i<4;i++){
             t[i][1].playFromStart();
@@ -261,10 +259,10 @@ public class TrackAnimate extends Race{
     public void endRace(Object o){
         for(int i=0;i<4;i++){
             if(((PathTransition)o).equals(t[i][2])){ //gets current animation
-                super.getRaceCars()[i].setSplit(2, super.raceTimer.getTimed()); // sets final split
-                super.getRaceCars()[i].setTotalTime(super.raceTimer.getTimed()); // sets final time
+                super.getRaceCars()[i].setSplit(2, super.getTimer().getTimed()); // sets final split
+                super.getRaceCars()[i].setTotalTime(super.getTimer().getTimed()); // sets final time
                 super.getRaceCars()[i].setLap(3); // sets lap for to string reasons
-                if(!super.getRaceCars()[i].invisible){ // doesnt count filler cars
+                if(!super.getRaceCars()[i].getInvisible()){ // doesnt count filler cars
                     finished++;
                 }
             }
@@ -274,8 +272,8 @@ public class TrackAnimate extends Race{
     
     public void replay(){
         Duration temp = Duration.seconds(winner.getTotalTime()-5);
-        System.out.println(winner.getTotalTime()-5);
-        super.raceTimer.setTime((long) temp.toSeconds());
+        
+        super.getTimer().setTime((long) temp.toSeconds());
         finished = 0;
         for(int i=0;i<4;i++){
             t[i][2].setOnFinished(new EventHandler<ActionEvent>() {
@@ -284,7 +282,7 @@ public class TrackAnimate extends Race{
                             endRace(event.getSource());  // this ends that cars race and checks if all cars have finished
                         }
                     });
-            temp = Duration.seconds(super.getRaceCars()[i].totalTime -super.raceTimer.getTimed());
+            temp = Duration.seconds(super.getRaceCars()[i].getTotalTime() -super.getTimer().getTimed());
             t[i][0].playFromStart();
             t[i][0].pause();
             if(temp.toSeconds()> super.getRaceCars()[i].getSplit(2)){
@@ -300,7 +298,7 @@ public class TrackAnimate extends Race{
             }
             super.getRaceCars()[i].reset(1);
         }
-        super.raceTimer.resume();
+        super.getTimer().resume();
     }
     
     
@@ -308,13 +306,13 @@ public class TrackAnimate extends Race{
     public void handle(long now){ //this is things that happen every frame
         super.handle(now);
         updateleaders();
-        if(finished==numRacers){ // checks if all racers finished
+        if(finished==super.getRacerNum()){ // checks if all racers finished
             if(winner.getTotalTime()<allstar.getTotalTime()){
                 allstar = winner;
                 allstarstats = "\nFastest Car: "+allstar.toString();
             }
             finished++;
-            super.raceTimer.pause();
+            super.getTimer().pause();
             final Stage winner = new Stage();
             VBox dialogVbox = new VBox();
             String s = "Race Over! \n";

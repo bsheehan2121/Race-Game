@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package racegame;
 
 import java.util.ArrayList;
@@ -15,18 +11,21 @@ import javafx.scene.text.FontWeight;
 
 /**
  *
- * @author Elizabeth Chapolini
+ * @author Elizabeth Chapolini, Ben Sheehan
  */
+
+// The Race class represents a race with a timer and a number of cars to race
 public class Race extends AnimationTimer{
     
     private long raceTime;
     private DrawCar[] raceCars;
     private ArrayList<DrawCar> userCars;
     
-    public Stopwatch raceTimer;
-    public Label l;
-    public int numRacers;
+    private Stopwatch raceTimer;
+    private Label l;
+    private int numRacers;
     
+    // This default constructor for Race was written initially by Elizabeth
     public Race(){
         raceCars = new DrawCar[4];
         for(int i=0;i<4;i++)
@@ -35,6 +34,7 @@ public class Race extends AnimationTimer{
         raceTime = 0;
         raceTimer = new Stopwatch();
         userCars = new ArrayList<DrawCar>();
+        // Ben added this part
         l = new Label("00:00");
         l.relocate(100,100);
         l.setMinSize(50, 50);
@@ -65,6 +65,7 @@ public class Race extends AnimationTimer{
     public void addCars(){
         // ***********Draw Cars******************************************************************************************
         numRacers = userCars.size();
+        // Elizabeth wrote this switch statement with input from Ben and Firas
         switch (numRacers) {
             case 4:
                 raceCars[0] = userCars.get(0);
@@ -99,12 +100,21 @@ public class Race extends AnimationTimer{
         
     }
     
+    public Stopwatch getTimer(){
+        return raceTimer;
+    }
+    
+    public int getRacerNum(){
+        return numRacers;
+    }
+    
+    // Elizabeth wrote this method
     public ArrayList<DrawCar> getCars(){
         return userCars;
     }
     
     
-    
+    // Elizabeth wrote this method
     public String toString(){
         String s = "";
         for(DrawCar c: userCars)
@@ -112,6 +122,7 @@ public class Race extends AnimationTimer{
         return s;
     }
 
+    // Ben wrote this method to set the timer text
     @Override
     public void handle(long now) {
         raceTimer.setTime();
